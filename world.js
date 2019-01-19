@@ -4,6 +4,7 @@ class World{
 		this.height = h;
 		this.data = [];
 		this.scrPos = [w/2,h/2];
+		this.characterOffset = [(screenWidth-1)/2, (screenHeight-1)/2];
 		for (var i = 0; i < this.width; i++){
 			var a = [];
 			for (var j = 0; j < this.height; j++){
@@ -11,6 +12,14 @@ class World{
 			}
 			this.data[i] = a;
 		}
+		for (var i = 0; i < this.width; i++){
+			for (var j = 0; j < this.height; j++){
+				if (i<8 || j < 1 || i > this.width-8 || j > this.height-2){
+					this.makeElement([i,j], 1);
+				}
+			}
+		}
+		
 	}
 	seeData(){
 		for (var i = 0; i < this.width; i++){
@@ -26,18 +35,11 @@ class World{
 	}
 	
 }
-var screenWidth = 9;
-var screenHeight = 9;
+var screenWidth = 15; // tiles
+var screenHeight = 15;
 var worldWidth = 100;
 var worldHeight = 100;
-class Character{
-	constructor(){
-		this.x = worldWidth - screenWidth/2;
-		this.y = worldHeight; // from top
-	}
-}
-var player = new Character();
-var tileSize = 50;
+var tileSize = 50; // pixels
 class Screen{
 	constructor(topLeftPos){
 		this.width = screenWidth;
@@ -46,7 +48,7 @@ class Screen{
 		for (var i = 0; i < this.width; i++){
 			var a = [];
 			for (var j = 0; j < this.height; j++){
-				if (i==4 && j==4){
+				if (i==(screenWidth-1)/2 && j==(screenHeight-1)/2){
 					a.push(2); // 2 = player, 1 = block, 0 = tile
 				}
 				else{
@@ -77,23 +79,68 @@ class Screen{
 var scr = new Screen();
 var p = new World(worldWidth,worldHeight,0);
 window.onload = function(){
-	p.makeElement([worldWidth/2+3,worldHeight/2 + 3],1);
 	p.seeData();
+	drawRoom(worldWidth/2,worldHeight/2,30,10);
 	window.addEventListener("keydown",function(evt){
-		if (evt.key=='w'){
-			p.scrPos[1]++;
+		var xChange = 0;
+		var yChange = 0;
+		if (evt.key=='w' || evt.keyCode==38){
+			yChange = -1;
 		}
-		else if (evt.key=='s'){
-			p.scrPos[1]--;
+		else if (evt.key=='s' || evt.keyCode==40){
+			yChange = 1;
 		}
-		else if (evt.key=='a'){
-			p.scrPos[0]--;
+		else if (evt.key=='a' || evt.keyCode==37){
+			xChange=-1;
 		}
-		else if (evt.key=='d'){
-			p.scrPos[0]++;
+		else if (evt.key=='d' || evt.keyCode==39){
+			xChange=1;
+		}
+		if (p.data[p.scrPos[0] + p.characterOffset[0]+xChange][p.scrPos[1]+p.characterOffset[1]+yChange]==0){
+			p.scrPos[0]+=xChange;
+			p.scrPos[1]+=yChange;
+		}
+		else{
+			console.log("movement blocked");
 		}
 		scr.view();
+		console.log(p.scrPos);
 	});
 	scr.view();
 }
-
+function drawRoom(xLeft,yTop,w,h){
+	var x = xLeft, y = yTop;
+	drawRoomCorner(x,y,1,1);
+	drawRoomCorner(x+w,y,1,0);
+	drawRoomCorner(x+w,y+h,0,0);
+	drawRoomCorner(x,y+h,0,1);
+	drawVertWall(y,y+h,x);
+	drawVertWall(y,y+h,x+w);
+	drawHorizWall(x,x+w,y);
+	drawHorizWall(x,x+w,y+h);
+}
+function drawVertWall(topY,bottomY,xPos){
+	for (var i = topY; i <= bottomY; i++){
+		p.makeElement([xPos,i],1);
+	}
+}
+function drawHorizWall(leftX,rightX,yPos){
+	for (var i = leftX; i <= rightX; i++){
+		p.makeElement([i,yPos],1);
+	}
+}
+function drawRoomCorner(x,y,top,left){
+	p.makeElement([x,y],1);
+	if (top){
+		p.makeElement([x,y+1],1);
+	}
+	else{
+		p.makeElement([x,y-1],1);
+	}
+	if (left){
+		p.makeElement([x+1,y],1);
+	}
+	else{
+		p.makeElement([x-1,y],1);
+	}
+}
