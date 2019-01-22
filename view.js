@@ -38,7 +38,7 @@ class Screen{
 				}
 				ctx.fillRect(i*tileSize, j*tileSize, tileSize, tileSize);
 				// now check if there's a product
-				let prodImg = "/home/tom/Desktop/Shopper/JS/Frontend/v3/pics/";
+				let prodImg = window.location.pathname.replace("index.html", "") + "pics/";
 				let img = new Image();
 				let imgName = "";
 				if (p.data[p.scrPos[0] + i][p.scrPos[1] + j] == 101){
