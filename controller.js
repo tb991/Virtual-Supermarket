@@ -28,7 +28,17 @@ window.onload = function(){
 			p.scrPos[0]+=xChange;
 			p.scrPos[1]+=yChange;
 			if (evt.key=="Enter" && code>100){
-				console.log("User tries to buy a product");
+				console.log("User tries to buy a product with name " + products[code-101]);
+				
+				if (basketPtrY%18==0 && basketPtrY != 0){
+					basketPtrX++;
+					basketPtrY=0;
+				}	
+				
+				if (numItems < 71){		
+					drawImg(products[code-101]);
+					numItems++;
+				}		
 			}
 		}
 		else{
@@ -38,6 +48,9 @@ window.onload = function(){
 		//console.log(p.scrPos);
 	});
 	scr.view();
+	// basket onload
+	basket = document.getElementById("basket");
+	basketCtx = basket.getContext("2d");
 }
 function loadProducts(){
 
