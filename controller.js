@@ -23,7 +23,7 @@ window.onload = function(){
 		else if (evt.key=='d' || evt.keyCode==39){
 			xChange=1;
 		}
-		let code = p.data[p.scrPos[0] + p.characterOffset[0]+xChange][p.scrPos[1]+p.characterOffset[1]+yChange];
+		let code = p.data[p.scrPos[0] + p.characterOffset[0]+xChange][p.scrPos[1]+p.characterOffset[1]+yChange]; // the block's code that he's standing on
 		if (code <1 || code > 100){ // traversable-block or product
 			p.scrPos[0]+=xChange;
 			p.scrPos[1]+=yChange;
@@ -40,6 +40,13 @@ window.onload = function(){
 					numItems++;
 				}		
 			}
+			// inform the user of the name of the product that he's standing on
+			if (code > 100){
+				document.getElementById("product").innerHTML = products[code-101];
+			}
+			else {
+				document.getElementById("product").innerHTML = "";
+			}
 		}
 		else{
 			console.log("movement blocked");
@@ -51,6 +58,7 @@ window.onload = function(){
 	// basket onload
 	basket = document.getElementById("basket");
 	basketCtx = basket.getContext("2d");
+	// make images initially visible
 }
 function loadProducts(){
 

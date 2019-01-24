@@ -14,8 +14,3 @@ function drawImg(name){
 		basketPtrY++;
 	}
 }
-
-document.addEventListener("keydown", function(evt){
-	
-	//console.log(basketPtr);
-})

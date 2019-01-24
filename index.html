@@ -6,18 +6,29 @@
 		<script src="basket.js"></script>
 		<style>
 		#basket{
-			background-color: darkgrey;
-			display: inline-block;
-		}
-		#basket{
 			position: fixed;
 			top: 8px;
 			left: 760px;
+			background-color: darkgrey;
+			display: inline-block;
+		}
+		#checkoutBtn{
+			display: inline-block;
+			position: fixed;
+			top: 610px;
+			left: 760px;
+			width: 130px;
+			height: 150px;
+		}
+		#product{
+			font-size: 50px;
 		}
 		</style>
 	</head>
 	<body>
 		<canvas id="game" width="800" height="800"></canvas>
 		<canvas id="basket" width="130" height="600"></canvas>
+		<button id="checkoutBtn">Checkout</button>
+		<p id="product"></p>
 	</body>
 </html>
