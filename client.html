@@ -1,0 +1,29 @@
+<html>
+<head>
+<script>
+var exampleSocket = new WebSocket("ws://192.168.1.102:8080");
+function sendUsernameAndPassword(){
+	var u = document.getElementById("username").value;
+	var p = document.getElementById("password").value;
+	console.log(u);
+	console.log(p);
+	exampleSocket.send("U" + u + p + "," + u.length + "," + p.length);
+}
+exampleSocket.onmessage = e => {
+	if(e.data[0]=="C"){
+		localStorage.setItem('sessionKey',e.data.split(",")[1]);
+		//document.getElementById("welcomeMsg").innerHTML = localStorage.getItem('sessionKey');;
+		window.location.href = window.location + localStorage.getItem('sessionKey');
+	}
+}
+</script>
+</head>
+
+<body>
+<h1>Welcome, please log in</h1>
+Username: <input id="username"><br>
+Password: <input id="password" type="password"><br>
+<button onclick="sendUsernameAndPassword()">Log in</button>
+<p id="welcomeMsg"></p>
+</body>
+</html>
